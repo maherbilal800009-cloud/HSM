@@ -9,23 +9,17 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { Context } from "./main";
 import Login from "./Pages/Login";
+import api from "./api";
 const App = () => {
-  const API_URL = import.meta.env.VITE_API_URL;
   const { isAuthenticated, setIsAuthenticated, setUser } =
     useContext(Context);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(
-          `${API_URL}/api/v1/user/patient/me`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await api.get("/v1/user/patient/me");
         setIsAuthenticated(true);
         setUser(response.data.user);
       } catch (error) {

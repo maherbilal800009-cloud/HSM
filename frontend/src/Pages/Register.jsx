@@ -1,8 +1,8 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { Context } from "../main";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import api, { getApiErrorMessage } from "../api";
 
 const Register = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
@@ -19,17 +19,12 @@ const Register = () => {
   const navigateTo = useNavigate();
 
   const handleRegistration = async (e) => {
-    const API_URL = import.meta.env.VITE_API_URL;
     e.preventDefault();
     try {
-      await axios
+      await api
         .post(
-          `${API_URL}/api/v1/user/patient/register`,
+          "/v1/user/patient/register",
           { firstName, lastName, email, phone, nic, dob, gender, password },
-          {
-            withCredentials: true,
-            headers: { "Content-Type": "application/json" },
-          }
         )
         .then((res) => {
           toast.success(res.data.message);
@@ -45,7 +40,7 @@ const Register = () => {
           setPassword("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(getApiErrorMessage(error));
     }
   };
 
