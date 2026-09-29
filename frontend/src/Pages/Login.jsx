@@ -1,13 +1,11 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { Context } from "../main";
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import api, { getApiErrorMessage } from "../api";
 
 const Login = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,14 +15,10 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios
+      await api
         .post(
-          `${API_URL}/api/v1/user/login`,
+          "/v1/user/login",
           { email, password, confirmPassword, role: "Patient" },
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
         )
         .then((res) => {
           toast.success(res.data.message);
@@ -35,7 +29,7 @@ const Login = () => {
           setConfirmPassword("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(getApiErrorMessage(error));
     }
   };
 

@@ -1,26 +1,22 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Context } from "../main";
+import api, { getApiErrorMessage } from "../api";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const handleLogout = async () => {
-    await axios
-      .get(`${API_URL}/api/v1/user/patient/logout`, {
-        withCredentials: true,
-      })
+    await api
+      .get("/v1/user/patient/logout")
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(false);
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
+        toast.error(getApiErrorMessage(err));
       });
   };
 

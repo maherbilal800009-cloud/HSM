@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import api, { getApiErrorMessage } from "../api";
 
 const MessageForm = () => {
-  const API_URL = import.meta.env.VITE_API_URL;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,14 +13,10 @@ const MessageForm = () => {
   const handleMessage = async (e) => {
     e.preventDefault();
     try {
-      await axios
+      await api
         .post(
-          `${API_URL}/api/v1/message/send`,
+          "/v1/message/send",
           { firstName, lastName, email, phone, message },
-          {
-            withCredentials: true,
-            headers: { "Content-Type": "application/json" },
-          }
         )
         .then((res) => {
           toast.success(res.data.message);
@@ -32,7 +27,7 @@ const MessageForm = () => {
           setMessage("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(getApiErrorMessage(error));
     }
   };
 

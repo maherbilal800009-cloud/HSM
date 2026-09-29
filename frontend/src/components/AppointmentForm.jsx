@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import api, { getApiErrorMessage } from "../api";
 
 const AppointmentForm = () => {
 
-  const API_URL = import.meta.env.VITE_API_URL;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,12 +35,12 @@ const AppointmentForm = () => {
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
     const fetchDoctors = async () => {
-      const { data } = await axios.get(
-        `${API_URL}/api/v1/user/doctors`,
-        { withCredentials: true }
-      );
-      setDoctors(data.doctors);
-      console.log(data.doctors);
+      try {
+        const { data } = await api.get("/v1/user/doctors");
+        setDoctors(data.doctors);
+      } catch (error) {
+        toast.error(getApiErrorMessage(error));
+      }
     };
     fetchDoctors();
   }, []);
@@ -49,8 +48,8 @@ const AppointmentForm = () => {
     e.preventDefault();
     try {
       const hasVisitedBool = Boolean(hasVisited);
-      const { data } = await axios.post(
-        `${API_URL}/api/v1/appointment/post`,
+      const { data } = await api.post(
+        "/v1/appointment/post",
         {
           firstName,
           lastName,
@@ -65,10 +64,6 @@ const AppointmentForm = () => {
           doctor_lastName: doctorLastName,
           hasVisited: hasVisitedBool,
           address,
-        },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
         }
       );
       toast.success(data.message);
@@ -86,7 +81,7 @@ const AppointmentForm = () => {
         setHasVisited(""),
         setAddress("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(getApiErrorMessage(error));
     }
   };
 
