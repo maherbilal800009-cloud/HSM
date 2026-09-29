@@ -3,14 +3,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Context } from "../main";
 import axios from "axios";
+import { API_URL } from "../api";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
   const navigateTo = useNavigate();

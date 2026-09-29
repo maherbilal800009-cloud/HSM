@@ -3,10 +3,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Context } from "../main";
 import { Navigate } from "react-router-dom";
+import { API_URL } from "../api";
 
 
 const Doctors = () => {
-  const API_URL = import.meta.env.VITE_API_URL;
   const [doctors, setDoctors] = useState([]);
   const { isAuthenticated } = useContext(Context);
   useEffect(() => {

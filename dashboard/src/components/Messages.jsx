@@ -3,13 +3,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Context } from "../main";
 import { Navigate } from "react-router-dom";
+import { API_URL } from "../api";
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const { isAuthenticated } = useContext(Context);
-  const API_URL = import.meta.env.VITE_API_URL;
-
-
   useEffect(() => {
     const fetchMessages = async () => {
       try {

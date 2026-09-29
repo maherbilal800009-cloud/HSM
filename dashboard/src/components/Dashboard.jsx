@@ -5,12 +5,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { GoCheckCircleFill } from "react-icons/go";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { API_URL } from "../api";
 
 const Dashboard = () => {
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const API_URL = import.meta.env.VITE_API_URL;
-
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
